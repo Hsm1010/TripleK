@@ -10,11 +10,17 @@ using System.Windows.Forms;
 
 namespace TripleK
 {
-    public partial class Form1 : Form
+    public partial class PayForm : Form
     {
-        public Form1()
+        public PayForm(decimal total)
         {
             InitializeComponent();
+            lblTotalPay.Text = $"총 결제 금액: {total}";
+        }
+
+        private void PayForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
