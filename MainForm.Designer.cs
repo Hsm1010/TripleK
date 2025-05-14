@@ -124,7 +124,7 @@
             this.lblTotal.AutoSize = true;
             this.lblTotal.Depth = 0;
             this.lblTotal.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblTotal.Location = new System.Drawing.Point(7, 498);
+            this.lblTotal.Location = new System.Drawing.Point(6, 602);
             this.lblTotal.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(29, 19);
@@ -134,9 +134,9 @@
             // panelContent
             // 
             this.panelContent.AutoScroll = true;
-            this.panelContent.Location = new System.Drawing.Point(6, 143);
+            this.panelContent.Location = new System.Drawing.Point(6, 191);
             this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(593, 342);
+            this.panelContent.Size = new System.Drawing.Size(718, 391);
             this.panelContent.TabIndex = 7;
             // 
             // panel1
@@ -145,7 +145,7 @@
             this.panel1.Controls.Add(this.btnDessert);
             this.panel1.Controls.Add(this.btnDrink);
             this.panel1.Controls.Add(this.btnCoffee);
-            this.panel1.Location = new System.Drawing.Point(6, 84);
+            this.panel1.Location = new System.Drawing.Point(6, 90);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(306, 44);
             this.panel1.TabIndex = 8;
@@ -157,7 +157,7 @@
             this.btnPay.Depth = 0;
             this.btnPay.HighEmphasis = true;
             this.btnPay.Icon = null;
-            this.btnPay.Location = new System.Drawing.Point(420, 489);
+            this.btnPay.Location = new System.Drawing.Point(622, 591);
             this.btnPay.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnPay.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnPay.Name = "btnPay";
@@ -178,7 +178,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 534);
+            this.ClientSize = new System.Drawing.Size(737, 658);
             this.Controls.Add(this.btnPay);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelContent);

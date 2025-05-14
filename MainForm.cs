@@ -139,7 +139,7 @@ namespace TripleK
             };
 
         }
-        
+
         //카테고리를 인자로 받아서 해당 카테고리를 panel에 띄워줌
         private void LoadCategory(string cate)
         {
@@ -152,7 +152,7 @@ namespace TripleK
                 {
                     //mic 크기 설정
                     Width = 160,
-                    Height = 100,
+                    Height = 120,
                     Margin = new Padding(5, 0, 5, 0)
                 };
                 mic.AddClicked += (_, args) =>
@@ -167,7 +167,7 @@ namespace TripleK
 
                     if (existingItem != null)
                     {
-                        if(existingItem.quantity >= 1)
+                        if (existingItem.quantity >= 1)
                             existingItem.quantity = existingItem.quantity - 1;
                         else
                             cart.Remove(existingItem);
@@ -190,7 +190,7 @@ namespace TripleK
         private void btnPay_Click(object sender, EventArgs e)
         {
             var cartForm = new Cart(cart);
-            if(cartForm.ShowDialog() == DialogResult.OK)
+            if (cartForm.ShowDialog() == DialogResult.OK)
             {
                 cart.Clear();
                 UpdateTotal();
@@ -201,7 +201,7 @@ namespace TripleK
         private void btnCoffee_Click(object sender, EventArgs e)
         {
             coffeeClickCount++;
-            if(coffeeClickCount >= 5)
+            if (coffeeClickCount >= 5)
             {
                 var adminForm = new AdminForm(itemsCategory);
                 adminForm.ShowDialog();

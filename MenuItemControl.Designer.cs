@@ -49,7 +49,7 @@ namespace TripleK
             this.lblName.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblName.CursorType = System.Windows.Forms.Cursors.Default;
             this.lblName.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblName.Location = new System.Drawing.Point(3, 83);
+            this.lblName.Location = new System.Drawing.Point(123, 29);
             this.lblName.Name = "lblName";
             this.lblName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblName.Size = new System.Drawing.Size(86, 20);
@@ -65,7 +65,7 @@ namespace TripleK
             this.lblPrice.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblPrice.CursorType = System.Windows.Forms.Cursors.Default;
             this.lblPrice.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblPrice.Location = new System.Drawing.Point(95, 83);
+            this.lblPrice.Location = new System.Drawing.Point(123, 55);
             this.lblPrice.Name = "lblPrice";
             this.lblPrice.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lblPrice.Size = new System.Drawing.Size(86, 20);
@@ -81,7 +81,7 @@ namespace TripleK
             this.btnAdd.Depth = 0;
             this.btnAdd.HighEmphasis = true;
             this.btnAdd.Icon = null;
-            this.btnAdd.Location = new System.Drawing.Point(95, 6);
+            this.btnAdd.Location = new System.Drawing.Point(0, 105);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnAdd.Name = "btnAdd";
@@ -97,7 +97,7 @@ namespace TripleK
             // 
             this.pictureBox.Location = new System.Drawing.Point(3, 3);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(70, 70);
+            this.pictureBox.Size = new System.Drawing.Size(114, 93);
             this.pictureBox.TabIndex = 4;
             this.pictureBox.TabStop = false;
             // 
@@ -108,7 +108,7 @@ namespace TripleK
             this.btnSub.Depth = 0;
             this.btnSub.HighEmphasis = true;
             this.btnSub.Icon = null;
-            this.btnSub.Location = new System.Drawing.Point(95, 38);
+            this.btnSub.Location = new System.Drawing.Point(72, 105);
             this.btnSub.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSub.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnSub.Name = "btnSub";
@@ -130,7 +130,7 @@ namespace TripleK
             this.Controls.Add(this.lblPrice);
             this.Controls.Add(this.lblName);
             this.Name = "MenuItemControl";
-            this.Size = new System.Drawing.Size(188, 110);
+            this.Size = new System.Drawing.Size(213, 146);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
