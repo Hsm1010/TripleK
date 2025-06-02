@@ -12,7 +12,9 @@ using MaterialSkin;
 using MaterialSkin.Controls;
 using System.IO;
 namespace TripleK
+
 {
+
     public partial class MainForm : MaterialForm
     {
         //cart는 현재 담은 장바구니
@@ -29,7 +31,7 @@ namespace TripleK
             var msm = MaterialSkinManager.Instance;
             msm.AddFormToManage(this);
             msm.Theme = MaterialSkinManager.Themes.LIGHT;
-
+ 
             //메뉴 나오는 패널, 기본 설정
             panelContent.WrapContents = true;
             panelContent.FlowDirection = FlowDirection.LeftToRight;

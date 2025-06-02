@@ -14,9 +14,14 @@ namespace TripleK
     public partial class Cart : MaterialForm
     {
         private decimal total;
+        private socket_Interact.socketCon socket_Interact = null;
 
         public Cart(List<MenuItem> cart)
         {
+            socket_Interact = new socket_Interact.socketCon();
+            socket_Interact.RequestGetItemDetail("americano");
+            socket_Interact.RequestGetItem("americano");
+            socket_Interact.RequestBuyItem("americano", 20);
             InitializeComponent();
             // 그룹화하여 수량 및 합계 계산
             var grouped = cart
@@ -54,12 +59,15 @@ namespace TripleK
             lblCartTotal.Text = $"총액: {total}";
             btnCheckOut.Click += (s, e) =>
             {
+                
                 // 결제 폼 호출
                 using (var payForm = new PayForm(total))
                 {
+                    
                     payForm.ShowDialog();
                 }
                 this.DialogResult = DialogResult.OK;
+                socket_Interact.Close();
                 this.Close();
             };
         }
