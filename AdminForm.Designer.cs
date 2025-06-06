@@ -979,12 +979,3 @@ namespace TripleK
         private System.Windows.Forms.Label label2;
     }
 }
-        #endregion
-
-        private MaterialSkin.Controls.MaterialComboBox cmbCategory;
-        private Bunifu.UI.WinForms.BunifuDataGridView dgvMenuItems;
-        private System.Windows.Forms.NumericUpDown nudAddQuantity;
-        private Bunifu.UI.WinForms.BunifuButton.BunifuButton btnAddStock;
-        private System.Windows.Forms.Label label1;
-    }
-}

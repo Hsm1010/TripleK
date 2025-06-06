@@ -43,7 +43,7 @@ namespace TripleK
             btnSaveChanges.Click += btnSaveChanges_Click;
             btnDeleteProduct.Click += btnDeleteProduct_Click;
 
-            
+
             RefreshMenuItemsGrid();  // 메뉴 목록 그리드 새로고침
             ClearEditFields(); // 수정 관련 입력 필드 초기화
         }
@@ -52,7 +52,7 @@ namespace TripleK
         {
             RefreshMenuItemsGrid(); // 폼이 로드될 때 메뉴 목록을 다시 표시
         }
-       
+
         private void cmbCategory_SelectedIndexChanged(object sender, EventArgs e)  // 카테고리 콤보박스의 선택이 변경되었을 때 호출되는 메소드
         {
             RefreshMenuItemsGrid();
@@ -71,7 +71,7 @@ namespace TripleK
             if (itemsCategory.ContainsKey(selectedCategory))
             {
                 var list = itemsCategory[selectedCategory];
-                dgvMenuItems.DataSource = null; 
+                dgvMenuItems.DataSource = null;
                 dgvMenuItems.DataSource = list.Select(x => new
                 {
                     이름 = x.Name,
@@ -95,10 +95,10 @@ namespace TripleK
                 var item = itemsCategory[selectedCategory].FirstOrDefault(x => x.Name == itemName);
                 if (item != null)
                 {
-                    item.quantity += nudAddStockQuantity.Value; 
+                    item.quantity += nudAddStockQuantity.Value;
                     RefreshMenuItemsGrid();
                     MessageBox.Show($"{itemName}의 재고가 {nudAddStockQuantity.Value}만큼 추가되었습니다.", "재고 추가 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    nudAddStockQuantity.Value = 0; 
+                    nudAddStockQuantity.Value = 0;
                 }
             }
             else
@@ -108,7 +108,7 @@ namespace TripleK
         }
 
         // 새 제품 추가 관련 메소드
-        
+
         private void btnSelectNewImage_Click(object sender, EventArgs e) // '새 이미지 선택' 버튼 클릭 시, 파일 탐색기를 열어 이미지를 선택하는 메소드
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -119,7 +119,7 @@ namespace TripleK
                     try
                     {
                         picNewProductPreview.Image = Image.FromFile(openFileDialog.FileName);
-                        currentSelectedImagePath = openFileDialog.FileName; 
+                        currentSelectedImagePath = openFileDialog.FileName;
                     }
                     catch (Exception ex)
                     {
@@ -176,7 +176,7 @@ namespace TripleK
             {
                 Name = name,
                 Price = price,
-                Image = image, 
+                Image = image,
                 quantity = quantity
             };
 
@@ -184,7 +184,7 @@ namespace TripleK
             RefreshMenuItemsGrid();
             MessageBox.Show($"'{name}' 제품이 성공적으로 추가되었습니다.", "제품 추가 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            
+
             txtNewProductName.Clear();
             nudNewProductPrice.Value = 0;
             nudNewProductQuantity.Value = 0;
@@ -205,13 +205,13 @@ namespace TripleK
                 {
                     txtEditProductName.Text = item.Name;
                     nudEditProductPrice.Value = item.Price;
-                    picEditProductPreview.Image = item.Image; 
-                    currentEditSelectedImagePath = null; 
+                    picEditProductPreview.Image = item.Image;
+                    currentEditSelectedImagePath = null;
                     gbEditProduct.Enabled = true;
                 }
                 else
                 {
-                    ClearEditFields(); 
+                    ClearEditFields();
                 }
             }
             else
@@ -242,7 +242,7 @@ namespace TripleK
                     try
                     {
                         picEditProductPreview.Image = Image.FromFile(openFileDialog.FileName);
-                        currentEditSelectedImagePath = openFileDialog.FileName; 
+                        currentEditSelectedImagePath = openFileDialog.FileName;
                     }
                     catch (Exception ex)
                     {
@@ -257,7 +257,7 @@ namespace TripleK
             if (dgvMenuItems.SelectedRows.Count > 0 && cmbCategory.SelectedItem != null)
             {
                 string selectedCategory = cmbCategory.SelectedItem.ToString();
-               // 수정 전 원래 제품 이름 가져오기 (이름이 변경될 경우를 대비)
+                // 수정 전 원래 제품 이름 가져오기 (이름이 변경될 경우를 대비)
                 string originalItemName = dgvMenuItems.SelectedRows[0].Cells["이름"].Value.ToString();
 
                 var itemToEdit = itemsCategory[selectedCategory].FirstOrDefault(x => x.Name == originalItemName);
@@ -270,7 +270,7 @@ namespace TripleK
 
                 string newName = txtEditProductName.Text.Trim();
                 decimal newPrice = nudEditProductPrice.Value;
-                Image newImage = picEditProductPreview.Image; 
+                Image newImage = picEditProductPreview.Image;
 
                 if (string.IsNullOrWhiteSpace(newName))
                 {
@@ -284,14 +284,14 @@ namespace TripleK
                     nudEditProductPrice.Focus();
                     return;
                 }
-                if (newImage == null) 
+                if (newImage == null)
                 {
                     MessageBox.Show("제품 이미지가 없습니다. 이미지를 선택해주세요.", "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
 
-                
+
                 if (!newName.Equals(originalItemName, StringComparison.OrdinalIgnoreCase) &&
                     itemsCategory[selectedCategory].Any(item => item.Name.Equals(newName, StringComparison.OrdinalIgnoreCase)))
                 {
@@ -302,7 +302,7 @@ namespace TripleK
 
                 itemToEdit.Name = newName;
                 itemToEdit.Price = newPrice;
-                itemToEdit.Image = newImage; 
+                itemToEdit.Image = newImage;
 
                 RefreshMenuItemsGrid();
                 MessageBox.Show($"'{originalItemName}' 제품 정보가 성공적으로 수정되었습니다.", "수정 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);

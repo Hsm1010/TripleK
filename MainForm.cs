@@ -11,10 +11,14 @@ using System.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
 using System.IO;
+using System.Text.Json;
+using TripleK.TKClient;
+
 namespace TripleK
 {
     public partial class MainForm : MaterialForm
     {
+                        private const string ADMIN_PASSWORD = "aa";
         //cart는 현재 담은 장바구니
         private List<MenuItem> cart;
         //itemsCategory는 카테고리 전환을 위함.
@@ -23,9 +27,13 @@ namespace TripleK
         //관리자 모드를 위한 기능,
         //커피 카테고리를 5번 연속으로 누르면 관리자 모드로 진입하게 됨.
         private int coffeeClickCount = 0;
+
+        private Client client;
         public MainForm()
         {
             InitializeComponent();
+            client = new Client("127.0.0.1", 8000); //여기 실제 주소로
+            
             var msm = MaterialSkinManager.Instance;
             msm.AddFormToManage(this);
             msm.Theme = MaterialSkinManager.Themes.LIGHT;
@@ -39,8 +47,8 @@ namespace TripleK
             panelContent.Padding = new Padding(10, 0, 10, 0);
 
             cart = new List<MenuItem>();
-            initializeMenu();
-
+            //initializeMenu();
+            LoadMenuFromServer(); //이 부분 추후 서버데이터와 연동
             //초기엔 커피 화면
             LoadCategory("커피");
 
@@ -140,6 +148,71 @@ namespace TripleK
 
         }
 
+        private void LoadMenuFromServer()
+        {
+            itemsCategory = new Dictionary<string, List<MenuItem>>();
+            string json = client.SendRequest(Instructions.GetItemDetail, new { });
+            var serverItems = JsonSerializer.Deserialize<Dictionary<string, MenuItem>>(json)
+                ?? new Dictionary<string, MenuItem>();
+
+            var coffeeList = new List<MenuItem>();
+            foreach (var item in serverItems) 
+            {
+                coffeeList.Add(new MenuItem
+                {
+                    Name = item.Key,
+                    Price = item.Value.Price,
+                    Image = item.Value.Image,
+                    quantity = 0
+                });
+            }
+
+            var drinkList = new List<MenuItem>();
+            foreach (var item in serverItems)
+            {
+                drinkList.Add(new MenuItem
+                {
+                    Name = item.Key,
+                    Price = item.Value.Price,
+                    Image = item.Value.Image,
+                    quantity = 0
+                });
+            }
+            var dessertList = new List<MenuItem>();
+            foreach (var item in serverItems)
+            {
+                dessertList.Add(new MenuItem
+                {
+                    Name = item.Key,
+                    Price = item.Value.Price,
+                    Image = item.Value.Image,
+                    quantity = 0
+                });
+            }
+            var cakeList = new List<MenuItem>();
+            foreach (var item in serverItems)
+            {
+                cakeList.Add(new MenuItem
+                {
+                    Name = item.Key,
+                    Price = item.Value.Price,
+                    Image = item.Value.Image,
+                    quantity = 0
+                });
+            }
+            itemsCategory["커피"] = coffeeList;
+            itemsCategory["음료"] = drinkList;
+            itemsCategory["디저트"] = dessertList;
+            itemsCategory["케잌"] = cakeList;
+        }
+
+        private void SendBuyRequest(string item, int quantity)
+        {
+            var payload = new {item = item,  quantity = quantity};
+            string response = client.SendRequest(Instructions.BuyItems, payload);
+            MessageBox.Show(response, "서버 응답");
+        }
+
         //카테고리를 인자로 받아서 해당 카테고리를 panel에 띄워줌
         private void LoadCategory(string cate)
         {
@@ -195,6 +268,10 @@ namespace TripleK
                 cart.Clear();
                 UpdateTotal();
             }
+            foreach(var item in cart)
+            {
+                SendBuyRequest(item.Name, (int)item.quantity);
+            }
         }
 
         //관리자 모드를 위함.
@@ -203,9 +280,20 @@ namespace TripleK
             coffeeClickCount++;
             if (coffeeClickCount >= 5)
             {
-                var adminForm = new AdminForm(itemsCategory);
-                adminForm.ShowDialog();
                 coffeeClickCount = 0;
+                var pwdForm = new PassWordForm();
+                if(pwdForm.ShowDialog() == DialogResult.OK)
+                {
+                    if(pwdForm.PassWord == ADMIN_PASSWORD)
+                    {
+                        var adminForm = new AdminForm(itemsCategory);
+                        adminForm.ShowDialog();
+                    }
+                    else
+                    {
+                        MessageBox.Show("비밀번호가 일치하지 않습니다.");
+                    }
+                }
             }
             else
             {
