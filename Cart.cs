@@ -8,29 +8,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TripleK.TKClient;
 
 namespace TripleK
 {
     public partial class Cart : MaterialForm
     {
         private decimal total;
+        private readonly List<MenuItem> _cart;
+        private readonly Client _client;    
 
-        public Cart(List<MenuItem> cart)
+        public Cart(List<MenuItem> cart, Client client)
         {
             InitializeComponent();
-            // 그룹화하여 수량 및 합계 계산
-            var grouped = cart
-                .GroupBy(x => new { x.Name, x.Price, x.Image }) // 이름, 가격, 이미지로 그룹화, 쿼리 작성하는 것과 유사
-                .Select(g => new
-                {
-                    g.Key.Image,
-                    g.Key.Name,
-                    Quantity = g.Count(),
-                    UnitPrice = g.Key.Price,
-                    TotalPrice = g.Key.Price * g.Count()
-                }).ToList();
+            _cart = cart;
+            _client = client;
 
-            total = grouped.Sum(x => x.TotalPrice);
+            var view = _cart
+                .Where(x => x.Quantity > 0)
+                .Select(x => new
+                {
+                    x.Image,
+                    x.Name,
+                    x.Quantity,
+                    Price = x.Price,
+                    TotalPrice = x.Price * x.Quantity
+                }).ToList();
+            total = view.Sum(x => x.TotalPrice);
 
             // DataGridView 설정
             dgvCart.AutoGenerateColumns = false;
@@ -47,20 +51,20 @@ namespace TripleK
             dgvCart.Columns.Add(imgCol);
             dgvCart.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "이름", DataPropertyName = "Name" });
             dgvCart.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "수량", DataPropertyName = "Quantity" });
-            dgvCart.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "단가", DataPropertyName = "UnitPrice" });
+            dgvCart.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "단가", DataPropertyName = "Price" });
             dgvCart.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "합계", DataPropertyName = "TotalPrice" });
-            dgvCart.DataSource = grouped;
+            dgvCart.DataSource = view;
 
             lblCartTotal.Text = $"총액: {total}";
             btnCheckOut.Click += (s, e) =>
             {
                 // 결제 폼 호출
-                using (var payForm = new PayForm(total))
+                var payForm = new PayForm(_cart, _client);
+                if(payForm.ShowDialog() == DialogResult.OK)
                 {
-                    payForm.ShowDialog();
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
-                this.DialogResult = DialogResult.OK;
-                this.Close();
             };
         }
 

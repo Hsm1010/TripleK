@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.IO;
 
 namespace TripleK.TKClient
 {
@@ -17,18 +18,44 @@ namespace TripleK.TKClient
                             GetSales = 2,
                             BuyItems = 3,
                             AddAmount = 4,
-                        }
-    internal class Client : IDisposable
+                            AddProduct = 5,
+                            DeleteProduct = 6
+    }
+    public class Client : IDisposable
     {
         private readonly Socket _socket;
+        private readonly TcpClient _tcp;
+        private readonly NetworkStream _ns;
+        private readonly StreamReader _reader;
+        private readonly StreamWriter _writer;
 
         public Client(string host, int port)
         {
-            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _socket.Connect(IPAddress.Parse(host), port);     //이후 서버 실행시 확인
+            _tcp = new TcpClient(host, port);
+            _ns = _tcp.GetStream();
+            var utf8NoBom = new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+
+            _reader = new StreamReader(_ns, utf8NoBom);
+            _writer = new StreamWriter(_ns, utf8NoBom) { AutoFlush = true };
         }
 
         public string SendRequest<T>(Instructions inst, T payload)
+        {
+            string json = JsonSerializer.Serialize(payload);
+            // 1바이트 명령어, 2) JSON + 개행
+            _ns.WriteByte((byte)inst);
+            _writer.WriteLine(json);
+
+            // 서버 응답(한 줄) 대기
+            return _reader.ReadLine() ?? "";
+        }
+        /*        public Client(string host, int port)
+                {
+                    _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    _socket.Connect(IPAddress.Parse(host), port);     //이후 서버 실행시 확인
+                }*/
+
+        /*public string SendRequest<T>(Instructions inst, T payload)
         {
             string json = JsonSerializer.Serialize(payload);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
@@ -43,7 +70,25 @@ namespace TripleK.TKClient
             int received = _socket.Receive(receiveBuf);
             
             return Encoding.UTF8.GetString(receiveBuf, 0, received);
+        }*/
+
+        public string AddProduct(string serverKey, int initialAmount, decimal price)
+        {
+            var payload = new
+            {
+                itemName = serverKey,
+                quantity = initialAmount,
+                price = price
+            };
+            return SendRequest(Instructions.AddProduct, payload);
         }
+
+        public string DeleteProduct(string serverKey)
+        {
+            var payload = new { itemName = serverKey };
+            return SendRequest(Instructions.DeleteProduct, payload);
+        }
+
 
         public MenuItemDto GetItem(string ItemName)
         {

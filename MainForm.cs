@@ -47,13 +47,13 @@ namespace TripleK
             panelContent.Padding = new Padding(10, 0, 10, 0);
 
             cart = new List<MenuItem>();
-            //initializeMenu();
-            LoadMenuFromServer(); //이 부분 추후 서버데이터와 연동
+            initializeMenu();
+            //LoadMenuFromServer(); //이 부분 추후 서버데이터와 연동
             //초기엔 커피 화면
             LoadCategory("커피");
 
             //익명 함수 이용
-            btnDrink.Click += (s, e) => LoadCategory("음료");
+            btnDrink.Click += (s, e) => LoadCategory("음료"); 
             btnDessert.Click += (s, e) => LoadCategory("디저트");
             btnCake.Click += (s, e) => LoadCategory("케잌");
 
@@ -74,68 +74,68 @@ namespace TripleK
             {
                 new MenuItem
                 {
-                    Name = "아메리카노", Price = 2000, Image = Image.FromFile(Path.Combine(imageFolder, "c_dkap.jpg"))
+                    Name = "아메리카노", Price = 2000, Image = Image.FromFile(Path.Combine(imageFolder, "c_dkap.jpg")), ServerKey = "americano"
                 },
                 new MenuItem
                 {
-                    Name = "카페라떼", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "c_zkvpfkEp.jpg"))
+                    Name = "카페라떼", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "c_zkvpfkEp.jpg")), ServerKey = "caffeLatte"
                 },
                 new MenuItem
                 {
-                    Name = "바닐라라떼", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "c_qkslf.jpg"))
+                    Name = "바닐라라떼", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "c_qkslf.jpg")), ServerKey = "vanillaLatte"
                 },
                 new MenuItem
                 {
-                    Name = "커피모카", Price = 3500, Image = Image.FromFile(Path.Combine(imageFolder, "c_zjvlahzk.jpg"))
+                    Name = "커피모카", Price = 3500, Image = Image.FromFile(Path.Combine(imageFolder, "c_zjvlahzk.jpg")), ServerKey = "coffeMoca"
                 },
                 new MenuItem
                 {
-                    Name = "카푸치노", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "c_zkvn.jpg"))
+                    Name = "카푸치노", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "c_zkvn.jpg")), ServerKey = "cappuchino"
                 }
             };
             var drinkList = new List<MenuItem>()
             {
                 new MenuItem
                 {
-                    Name = "에이드", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "b_dpdlem.jpg"))
+                    Name = "에이드", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "b_dpdlem.jpg")), ServerKey = "ade"
                 },
                 new MenuItem
                 {
-                    Name = "코코아", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "b_chzh.jpg"))
+                    Name = "코코아", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "b_chzh.jpg")), ServerKey = "cocoa"
                 },
                 new MenuItem
                 {
-                    Name = "스무디", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "b_tmanel.jpg"))
+                    Name = "스무디", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "b_tmanel.jpg")), ServerKey = "smoothie"
                 },
                 new MenuItem
                 {
-                    Name = "프라페", Price = 2500, Image= Image.FromFile(Path.Combine(imageFolder, "b_vmfkvp.jpg"))
+                    Name = "프라페", Price = 2500, Image= Image.FromFile(Path.Combine(imageFolder, "b_vmfkvp.jpg")), ServerKey = "praffe"
                 }
             };
             var dessertList = new List<MenuItem>()
             {
                 new MenuItem
                 {
-                    Name = "마카롱", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "d_akzkfhd.jpg"))
+                    Name = "마카롱", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "d_akzkfhd.jpg")), ServerKey = "macarong"
                 },
                 new MenuItem
                 {
-                    Name = "치아바타", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "d_cldk.jpg"))
+                    Name = "치아바타", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "d_cldk.jpg")), ServerKey = "chiamatta"
                 }
             };
             var cakeList = new List<MenuItem>()
             {
                 new MenuItem
                 {
-                    Name = "치즈케잌", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "ca_clwm.jpg"))
+                    Name = "치즈케잌", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "ca_clwm.jpg")), ServerKey = "cheaseCake"
                 },
                 new MenuItem
                 {
-                    Name = "딸기케잌", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "ca_Ekfrl.jpg"))
+                    Name = "딸기케잌", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "ca_Ekfrl.jpg")), ServerKey = "strawberryCake"
                 },
                 new MenuItem
                 {
-                    Name = "초코케잌", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "ca_chzh.jpg"))
+                    Name = "초코케잌", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "ca_chzh.jpg")), ServerKey = "chocolateCake"
                 }
             };
             itemsCategory = new Dictionary<string, List<MenuItem>>()
@@ -163,7 +163,7 @@ namespace TripleK
                     Name = item.Key,
                     Price = item.Value.Price,
                     Image = item.Value.Image,
-                    quantity = 0
+                    Quantity = 0
                 });
             }
 
@@ -175,7 +175,7 @@ namespace TripleK
                     Name = item.Key,
                     Price = item.Value.Price,
                     Image = item.Value.Image,
-                    quantity = 0
+                    Quantity = 0
                 });
             }
             var dessertList = new List<MenuItem>();
@@ -186,7 +186,7 @@ namespace TripleK
                     Name = item.Key,
                     Price = item.Value.Price,
                     Image = item.Value.Image,
-                    quantity = 0
+                    Quantity = 0
                 });
             }
             var cakeList = new List<MenuItem>();
@@ -197,7 +197,7 @@ namespace TripleK
                     Name = item.Key,
                     Price = item.Value.Price,
                     Image = item.Value.Image,
-                    quantity = 0
+                    Quantity = 0
                 });
             }
             itemsCategory["커피"] = coffeeList;
@@ -206,13 +206,13 @@ namespace TripleK
             itemsCategory["케잌"] = cakeList;
         }
 
-        private void SendBuyRequest(string item, int quantity)
+/*        private void SendBuyRequest(string item, int quantity)
         {
             var payload = new {item = item,  quantity = quantity};
             string response = client.SendRequest(Instructions.BuyItems, payload);
             MessageBox.Show(response, "서버 응답");
         }
-
+*/
         //카테고리를 인자로 받아서 해당 카테고리를 panel에 띄워줌
         private void LoadCategory(string cate)
         {
@@ -230,22 +230,24 @@ namespace TripleK
                 };
                 mic.AddClicked += (_, args) =>
                 {
-                    cart.Add(args.Item);
+                    var existed = cart.FirstOrDefault(x => x.Name == item.Name);
+                    if (existed != null) existed.Quantity++;
+                    else
+                    {
+                        item.Quantity = 1;
+                        cart.Add(item);
+                    }
                     UpdateTotal();
                 };
                 mic.SubClicked += (_, args) =>
                 {
                     //Name과 Price가 맞는 아이템을 가져옴.
-                    var existingItem = cart.FirstOrDefault(x => x.Name == item.Name && x.Price == item.Price);
+                    var existed = cart.FirstOrDefault(x => x.Name == item.Name);
+                    if (existed == null) return;
 
-                    if (existingItem != null)
-                    {
-                        if (existingItem.quantity >= 1)
-                            existingItem.quantity = existingItem.quantity - 1;
-                        else
-                            cart.Remove(existingItem);
-                        UpdateTotal();
-                    }
+                    existed.Quantity--;
+                    if (existed.Quantity <= 0) cart.Remove(existed);
+                    UpdateTotal();
                 };
                 panelContent.Controls.Add(mic);
             }
@@ -254,7 +256,7 @@ namespace TripleK
         //총 결제금액을 갱신해주는 함수
         private void UpdateTotal()
         {
-            string total = cart.Sum(x => x.Price).ToString();
+            string total = cart.Sum(x => x.Price * x.Quantity).ToString();
             lblTotal.Text = "총액: " + total;
         }
 
@@ -262,15 +264,11 @@ namespace TripleK
         //해당 장바구니 폼에서 결제버튼을 누르면 진짜 결제하는 화면을 염.
         private void btnPay_Click(object sender, EventArgs e)
         {
-            var cartForm = new Cart(cart);
+            var cartForm = new Cart(cart, client);
             if (cartForm.ShowDialog() == DialogResult.OK)
             {
                 cart.Clear();
                 UpdateTotal();
-            }
-            foreach(var item in cart)
-            {
-                SendBuyRequest(item.Name, (int)item.quantity);
             }
         }
 
@@ -286,7 +284,7 @@ namespace TripleK
                 {
                     if(pwdForm.PassWord == ADMIN_PASSWORD)
                     {
-                        var adminForm = new AdminForm(itemsCategory);
+                        var adminForm = new AdminForm(itemsCategory, client);
                         adminForm.ShowDialog();
                     }
                     else

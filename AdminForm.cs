@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using TripleK.TKClient;
+using System.Text.RegularExpressions;
 namespace TripleK
 {
     public partial class AdminForm : MaterialForm
@@ -16,12 +18,13 @@ namespace TripleK
         private Dictionary<string, List<MenuItem>> itemsCategory;  // 각 카테고리별 메뉴 아이템 목록
         private string currentSelectedImagePath = null;  // 새 제품 추가 시 선택된 이미지 경로
         private string currentEditSelectedImagePath = null;  // 제품 수정 시 선택된 이미지 경로
+        public Client _client;
 
-        public AdminForm(Dictionary<string, List<MenuItem>> itemsCategory)
+        public AdminForm(Dictionary<string, List<MenuItem>> itemsCategory, Client client)
         {
             InitializeComponent();
             this.itemsCategory = itemsCategory;
-
+            _client = client;
             // 카테고리 콤보박스 초기화
             cmbCategory.Items.AddRange(new string[] { "커피", "음료", "디저트", "케잌" });
             if (cmbCategory.Items.Count > 0)
@@ -76,7 +79,7 @@ namespace TripleK
                 {
                     이름 = x.Name,
                     가격 = x.Price,
-                    수량 = x.quantity
+                    수량 = x.Quantity
                 }).ToList();
             }
             else
@@ -95,7 +98,7 @@ namespace TripleK
                 var item = itemsCategory[selectedCategory].FirstOrDefault(x => x.Name == itemName);
                 if (item != null)
                 {
-                    item.quantity += nudAddStockQuantity.Value;
+                    item.Quantity += (int)nudAddStockQuantity.Value;
                     RefreshMenuItemsGrid();
                     MessageBox.Show($"{itemName}의 재고가 {nudAddStockQuantity.Value}만큼 추가되었습니다.", "재고 추가 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     nudAddStockQuantity.Value = 0;
@@ -141,7 +144,7 @@ namespace TripleK
 
             string name = txtNewProductName.Text.Trim();
             decimal price = nudNewProductPrice.Value;
-            decimal quantity = nudNewProductQuantity.Value;
+            int quantity = (int)nudNewProductQuantity.Value;
             Image image = picNewProductPreview.Image;
 
             if (string.IsNullOrWhiteSpace(name))
@@ -177,11 +180,19 @@ namespace TripleK
                 Name = name,
                 Price = price,
                 Image = image,
-                quantity = quantity
+                Quantity = quantity,
+                ServerKey = ToSlug(name)
             };
 
             itemsCategory[selectedCategory].Add(newItem);
             RefreshMenuItemsGrid();
+            //서버에 아이템 추가 신호 보냄
+            string addResp = _client.AddProduct(
+                newItem.ServerKey,
+                newItem.Quantity,
+                newItem.Price
+            );
+            MessageBox.Show("서버 응답");
             MessageBox.Show($"'{name}' 제품이 성공적으로 추가되었습니다.", "제품 추가 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
@@ -190,6 +201,36 @@ namespace TripleK
             nudNewProductQuantity.Value = 0;
             picNewProductPreview.Image = null;
             currentSelectedImagePath = null;
+        }
+
+        public static string ToSlug(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+
+            // 1) 단어 경계로 분리 (영숫자가 아닌 문자를 기준)
+            var parts = Regex
+                .Split(input, @"[^A-Za-z0-9가-힣]+")
+                .Where(p => p.Length > 0)
+                .ToArray();
+
+            if (parts.Length == 0)
+                return string.Empty;
+
+            // 2) 첫 단어는 모두 소문자
+            var sb = new StringBuilder(parts[0].ToLowerInvariant());
+
+            // 3) 두 번째 단어부터는 첫 글자만 대문자, 나머지는 소문자
+            for (int i = 1; i < parts.Length; i++)
+            {
+                var w = parts[i];
+                var lower = w.ToLowerInvariant();
+                sb.Append(char.ToUpperInvariant(lower[0]));
+                if (lower.Length > 1)
+                    sb.Append(lower.Substring(1));
+            }
+
+            return sb.ToString();
         }
 
         //제품 수정/삭제 관련 메소드
@@ -323,15 +364,19 @@ namespace TripleK
 
                 var itemToDelete = itemsCategory[selectedCategory].FirstOrDefault(x => x.Name == itemName);
 
-                if (itemToDelete != null)
+                if (itemToDelete != null)   
                 {
                     DialogResult confirmResult = MessageBox.Show($"'{itemName}' 제품을 정말 삭제하시겠습니까?", "삭제 확인", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (confirmResult == DialogResult.Yes)
                     {
                         itemsCategory[selectedCategory].Remove(itemToDelete);
                         RefreshMenuItemsGrid();
+                        //서버에 제거 신호 보냄
+                        string delResp = _client.DeleteProduct(itemToDelete.ServerKey);
+                        MessageBox.Show(delResp, "서버 응답");
                         MessageBox.Show($"'{itemName}' 제품이 삭제되었습니다.", "삭제 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ClearEditFields();
+
                     }
                 }
             }

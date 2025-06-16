@@ -43,9 +43,10 @@ namespace TripleK
     public class MenuItem
     {
         public string Name { get; set; }
+        public string ServerKey {  get; set; }
         public decimal Price { get; set; }
         public Image Image { get; set; }
-        public decimal quantity { get; set; }
+        public int Quantity { get; set; }
     }
     public class MenuItemEventArgs : EventArgs
     {
