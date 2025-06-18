@@ -18,7 +18,7 @@ namespace TripleK
 {
     public partial class MainForm : MaterialForm
     {
-                        private const string ADMIN_PASSWORD = "aa";
+                        private string ADMIN_PASSWORD = "aa";
         //cart는 현재 담은 장바구니
         private List<MenuItem> cart;
         //itemsCategory는 카테고리 전환을 위함.
@@ -74,23 +74,28 @@ namespace TripleK
             {
                 new MenuItem
                 {
-                    Name = "아메리카노", Price = 2000, Image = Image.FromFile(Path.Combine(imageFolder, "c_dkap.jpg")), ServerKey = "americano"
+                    Name = "아메리카노", Price = 2000, Image = Image.FromFile(Path.Combine(imageFolder, "c_dkap.jpg")), ServerKey = "americano",
+                    Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "카페라떼", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "c_zkvpfkEp.jpg")), ServerKey = "caffeLatte"
+                   , Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "바닐라라떼", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "c_qkslf.jpg")), ServerKey = "vanillaLatte"
+                    , Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "커피모카", Price = 3500, Image = Image.FromFile(Path.Combine(imageFolder, "c_zjvlahzk.jpg")), ServerKey = "coffeMoca"
+                    , Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "카푸치노", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "c_zkvn.jpg")), ServerKey = "cappuchino"
+                    , Quantity = 100, Amount = 100
                 }
             };
             var drinkList = new List<MenuItem>()
@@ -98,18 +103,22 @@ namespace TripleK
                 new MenuItem
                 {
                     Name = "에이드", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "b_dpdlem.jpg")), ServerKey = "ade"
+                    , Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "코코아", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "b_chzh.jpg")), ServerKey = "cocoa"
+                    , Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "스무디", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "b_tmanel.jpg")), ServerKey = "smoothie"
+                    , Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "프라페", Price = 2500, Image= Image.FromFile(Path.Combine(imageFolder, "b_vmfkvp.jpg")), ServerKey = "praffe"
+                    , Quantity = 100, Amount = 100
                 }
             };
             var dessertList = new List<MenuItem>()
@@ -117,10 +126,12 @@ namespace TripleK
                 new MenuItem
                 {
                     Name = "마카롱", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "d_akzkfhd.jpg")), ServerKey = "macarong"
+                    , Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "치아바타", Price = 2500, Image = Image.FromFile(Path.Combine(imageFolder, "d_cldk.jpg")), ServerKey = "chiamatta"
+                    , Quantity = 100, Amount = 100
                 }
             };
             var cakeList = new List<MenuItem>()
@@ -128,14 +139,17 @@ namespace TripleK
                 new MenuItem
                 {
                     Name = "치즈케잌", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "ca_clwm.jpg")), ServerKey = "cheaseCake"
+                    , Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "딸기케잌", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "ca_Ekfrl.jpg")), ServerKey = "strawberryCake"
+                    , Quantity = 100, Amount = 100
                 },
                 new MenuItem
                 {
                     Name = "초코케잌", Price = 3000, Image = Image.FromFile(Path.Combine(imageFolder, "ca_chzh.jpg")), ServerKey = "chocolateCake"
+                    , Quantity = 100, Amount = 100
                 }
             };
             itemsCategory = new Dictionary<string, List<MenuItem>>()

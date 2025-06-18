@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.IO;
+using System.Text.Json.Serialization;
 
 namespace TripleK.TKClient
 {
@@ -67,7 +68,12 @@ namespace TripleK.TKClient
             return SendRequest(Instructions.DeleteProduct, payload);
         }
 
-
+        public Dictionary<string, MenuItemDto> GetItemDetail()
+        {
+            string jsonResponse = SendRequest(Instructions.GetItemDetail, new { });
+            return JsonSerializer.Deserialize<Dictionary<string, MenuItemDto>>(jsonResponse)
+                   ?? new Dictionary<string, MenuItemDto>();
+        }
 
         public string BuyItems(string itemName, int quantity)
         {
@@ -92,6 +98,7 @@ namespace TripleK.TKClient
     public class MenuItemDto
     {
         public int Price { get; set; }
+        [JsonPropertyName("amount")]
         public int Amount { get; set; }
         public int Sold { get; set; }
 

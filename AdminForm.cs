@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.IO;
 using TripleK.TKClient;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 namespace TripleK
 {
     public partial class AdminForm : MaterialForm
@@ -32,6 +33,34 @@ namespace TripleK
                 cmbCategory.SelectedIndex = 0; // 기본적으로 첫 번째 카테고리 선택
             }
 
+            // 1) 서버에서 온 데이터 확인
+            var serverItems = client.GetItemDetail();
+            Debug.WriteLine($"[Debug] 서버에서 받아온 항목 수: {serverItems?.Count ?? 0}");
+            if (serverItems != null)
+                Debug.WriteLine($"[Debug] 서버 키 목록: {string.Join(", ", serverItems.Keys)}");
+
+            // 2) 로컬 itemsCategory 확인 및 매핑 시도 로그
+            foreach (var cat in this.itemsCategory)
+            {
+                Debug.WriteLine($"[Debug] 카테고리: {cat.Key} → 아이템: {string.Join(", ", cat.Value.Select(mi => $"{mi.Name}({mi.ServerKey})"))}");
+                foreach (var mi in cat.Value)
+                {
+                    if (serverItems != null && serverItems.TryGetValue(mi.ServerKey, out var dto))
+                    {
+                        mi.Amount = dto.Amount;
+                        Debug.WriteLine($"[Debug] 매핑 성공: {mi.Name}({mi.ServerKey}) → 재고={mi.Amount}");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"[Debug] 매핑 실패: {mi.Name}({mi.ServerKey})");
+                    }
+                }
+            }
+
+            // 3) 그리드에 반영
+            RefreshMenuItemsGrid();
+
+
             // 주요 이벤트 핸들러 연결
             cmbCategory.SelectedIndexChanged += cmbCategory_SelectedIndexChanged;
             btnAddStock.Click += btnAddStock_Click;
@@ -47,7 +76,6 @@ namespace TripleK
             btnDeleteProduct.Click += btnDeleteProduct_Click;
 
 
-            RefreshMenuItemsGrid();  // 메뉴 목록 그리드 새로고침
             ClearEditFields(); // 수정 관련 입력 필드 초기화
         }
 
@@ -79,7 +107,7 @@ namespace TripleK
                 {
                     이름 = x.Name,
                     가격 = x.Price,
-                    수량 = x.Quantity
+                    재고 = x.Amount
                 }).ToList();
             }
             else
@@ -104,7 +132,7 @@ namespace TripleK
                     string response = _client.AddAmount(item.ServerKey, quantityToAdd);
                     MessageBox.Show(response, "서버 응답");
 
-                    item.Quantity += (int)nudAddStockQuantity.Value;
+                    item.Amount += (int)nudAddStockQuantity.Value;
                     RefreshMenuItemsGrid();
                     MessageBox.Show($"{itemName}의 재고가 {nudAddStockQuantity.Value}만큼 추가되었습니다.", "재고 추가 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     nudAddStockQuantity.Value = 0;

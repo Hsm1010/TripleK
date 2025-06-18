@@ -61,7 +61,7 @@
             this.btnPay.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnPay.Name = "btnPay";
             this.btnPay.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnPay.Size = new System.Drawing.Size(158, 36);
+            this.btnPay.Size = new System.Drawing.Size(85, 36);
             this.btnPay.TabIndex = 1;
             this.btnPay.Text = "결제하기";
             this.btnPay.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -76,7 +76,7 @@
             this.Controls.Add(this.btnPay);
             this.Controls.Add(this.lblTotalPay);
             this.Name = "PayForm";
-            this.Text = "Form1";
+            this.Text = "결제";
             this.ResumeLayout(false);
             this.PerformLayout();
 

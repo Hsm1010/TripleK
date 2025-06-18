@@ -47,6 +47,11 @@ namespace TripleK
         public decimal Price { get; set; }
         public Image Image { get; set; }
         public int Quantity { get; set; }
+        public int Amount
+        {
+            get => Quantity;
+            set => Quantity = value;
+        }
     }
     public class MenuItemEventArgs : EventArgs
     {
