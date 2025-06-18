@@ -98,6 +98,12 @@ namespace TripleK
                 var item = itemsCategory[selectedCategory].FirstOrDefault(x => x.Name == itemName);
                 if (item != null)
                 {
+                    int quantityToAdd = (int)nudAddStockQuantity.Value;
+
+                    // 서버에 재고 추가 요청
+                    string response = _client.AddAmount(item.ServerKey, quantityToAdd);
+                    MessageBox.Show(response, "서버 응답");
+
                     item.Quantity += (int)nudAddStockQuantity.Value;
                     RefreshMenuItemsGrid();
                     MessageBox.Show($"{itemName}의 재고가 {nudAddStockQuantity.Value}만큼 추가되었습니다.", "재고 추가 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -203,6 +209,8 @@ namespace TripleK
             currentSelectedImagePath = null;
         }
 
+        //메뉴 추가시 한글을 영어로 바꿔주는 함수
+        //TextBox에 한글이 정확히 입력되지 않는 문제가 있음
         public static string ToSlug(string input)
         {
             if (string.IsNullOrWhiteSpace(input))

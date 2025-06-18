@@ -48,7 +48,7 @@ namespace TripleK
 
             cart = new List<MenuItem>();
             initializeMenu();
-            //LoadMenuFromServer(); //이 부분 추후 서버데이터와 연동
+
             //초기엔 커피 화면
             LoadCategory("커피");
 
@@ -148,71 +148,6 @@ namespace TripleK
 
         }
 
-        private void LoadMenuFromServer()
-        {
-            itemsCategory = new Dictionary<string, List<MenuItem>>();
-            string json = client.SendRequest(Instructions.GetItemDetail, new { });
-            var serverItems = JsonSerializer.Deserialize<Dictionary<string, MenuItem>>(json)
-                ?? new Dictionary<string, MenuItem>();
-
-            var coffeeList = new List<MenuItem>();
-            foreach (var item in serverItems) 
-            {
-                coffeeList.Add(new MenuItem
-                {
-                    Name = item.Key,
-                    Price = item.Value.Price,
-                    Image = item.Value.Image,
-                    Quantity = 0
-                });
-            }
-
-            var drinkList = new List<MenuItem>();
-            foreach (var item in serverItems)
-            {
-                drinkList.Add(new MenuItem
-                {
-                    Name = item.Key,
-                    Price = item.Value.Price,
-                    Image = item.Value.Image,
-                    Quantity = 0
-                });
-            }
-            var dessertList = new List<MenuItem>();
-            foreach (var item in serverItems)
-            {
-                dessertList.Add(new MenuItem
-                {
-                    Name = item.Key,
-                    Price = item.Value.Price,
-                    Image = item.Value.Image,
-                    Quantity = 0
-                });
-            }
-            var cakeList = new List<MenuItem>();
-            foreach (var item in serverItems)
-            {
-                cakeList.Add(new MenuItem
-                {
-                    Name = item.Key,
-                    Price = item.Value.Price,
-                    Image = item.Value.Image,
-                    Quantity = 0
-                });
-            }
-            itemsCategory["커피"] = coffeeList;
-            itemsCategory["음료"] = drinkList;
-            itemsCategory["디저트"] = dessertList;
-            itemsCategory["케잌"] = cakeList;
-        }
-
-/*        private void SendBuyRequest(string item, int quantity)
-        {
-            var payload = new {item = item,  quantity = quantity};
-            string response = client.SendRequest(Instructions.BuyItems, payload);
-            MessageBox.Show(response, "서버 응답");
-        }
-*/
         //카테고리를 인자로 받아서 해당 카테고리를 panel에 띄워줌
         private void LoadCategory(string cate)
         {

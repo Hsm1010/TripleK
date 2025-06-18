@@ -11,15 +11,15 @@ using System.IO;
 
 namespace TripleK.TKClient
 {
-                        public enum Instructions : byte
-                        {
-                            GetItem = 0,
-                            GetItemDetail = 1,
-                            GetSales = 2,
-                            BuyItems = 3,
-                            AddAmount = 4,
-                            AddProduct = 5,
-                            DeleteProduct = 6
+    public enum Instructions : byte
+    {
+        GetItem = 0,
+        GetItemDetail = 1,
+        GetSales = 2,
+        BuyItems = 3,
+        AddAmount = 4,
+        AddProduct = 5,
+        DeleteProduct = 6
     }
     public class Client : IDisposable
     {
@@ -49,28 +49,6 @@ namespace TripleK.TKClient
             // 서버 응답(한 줄) 대기
             return _reader.ReadLine() ?? "";
         }
-        /*        public Client(string host, int port)
-                {
-                    _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    _socket.Connect(IPAddress.Parse(host), port);     //이후 서버 실행시 확인
-                }*/
-
-        /*public string SendRequest<T>(Instructions inst, T payload)
-        {
-            string json = JsonSerializer.Serialize(payload);
-            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
-
-            byte[] sendBuf = new byte[jsonBytes.Length + 1];
-            sendBuf[0] = (byte)inst;
-            Array.Copy(jsonBytes, 0, sendBuf, 1, jsonBytes.Length);
-
-            _socket.Send(sendBuf);
-
-            var receiveBuf = new byte[4096];
-            int received = _socket.Receive(receiveBuf);
-            
-            return Encoding.UTF8.GetString(receiveBuf, 0, received);
-        }*/
 
         public string AddProduct(string serverKey, int initialAmount, decimal price)
         {
@@ -90,36 +68,6 @@ namespace TripleK.TKClient
         }
 
 
-        public MenuItemDto GetItem(string ItemName)
-        {
-            var payload = new { itemName = ItemName };
-            string jsonResponse = SendRequest(Instructions.GetItem, payload);
-
-            try
-            {
-                return JsonSerializer.Deserialize<MenuItemDto>(jsonResponse)
-                    ?? throw new Exception("파싱 결과가 null입니다.");
-            }
-            catch
-            {
-                return new MenuItemDto { ErrorMessage = jsonResponse };
-            }
-        }
-
-        public Dictionary<string, MenuItemDto> GetItemDetail()
-        {
-            string jsonResponse = SendRequest(Instructions.GetItemDetail, new { });
-            return JsonSerializer.Deserialize<Dictionary<string, MenuItemDto>>(jsonResponse)
-                ?? new Dictionary<string, MenuItemDto>();
-        }
-
-        public SalesDto GetSales()
-        {
-            string jsonResponse = SendRequest(Instructions.GetSales, new { });
-            return JsonSerializer.Deserialize<SalesDto>(jsonResponse) 
-                ?? new SalesDto { ErrorMessage = "파싱 실패" };
-
-        }
 
         public string BuyItems(string itemName, int quantity)
         {
@@ -147,11 +95,6 @@ namespace TripleK.TKClient
         public int Amount { get; set; }
         public int Sold { get; set; }
 
-        public string ErrorMessage { get; set; }
-    }
-    public class SalesDto
-    {
-        public int TotalSold { get; set; }
         public string ErrorMessage { get; set; }
     }
 }
